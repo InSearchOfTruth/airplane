@@ -1,0 +1,41 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: rgba(0,0,0,0.8)
+}
+.container{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.game{
+    background: url(../images/background.jpg);
+    position: relative;
+    width: 1024px;
+    height: 768px;
+}
+.canvas{
+    position: absolute;
+}
+.modal{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.modal-text{
+    padding: 15px 60px;
+    border: 2px solid gold;
+    border-radius: 30px;
+    font: 700 24px/24px 'Arial';
+    cursor: pointer
+}
+.cbalink{
+    display: none;
+}
