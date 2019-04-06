@@ -54,7 +54,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             width: 110,  //размеры самолета
             height: 40,
             fuel: 10, //вместимость бензобака
-            fuelConsumption: 1, //расход топлива за 100мс
+            fuelConsumption: 1, //расход топлива за 1c
             fallingSpeed: 1 //скрость свободного падения
         },
         clouds: {
@@ -118,7 +118,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         fuel: gameParams.plane.fuel,
         x: 457,
         y: 324,
-        state: false,
+        state: false, //состояние самолета для возможности блокировки руля
         actions: function(){
             this.drop()
         },
@@ -153,7 +153,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     }
     Cloud.prototype = {
         move: function(){
-            this.x -= this.speed
+            this.x -= this.speed  //движение облаков
         }
     }
 
@@ -205,7 +205,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
 
     // конструктор создания здвезд
     let Star = function(x,y,w,h){
-        this.x = x;
+        this.x = x;   
         this.y = y;
         this.width = w;
         this.height = h;
@@ -213,7 +213,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     Star.prototype = {
         img: gameParams.obstacle.stars.img,
         move: function(){
-            this.x -= 1
+            this.x -= 1     //передвижение звезды
             this.y+= 1
         },
         audio: loadAudio(['assets/audio/star.mp3'],gameParams.volume.music),
@@ -258,10 +258,11 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     Bird.prototype = {
         img : gameParams.obstacle.bird.img,
         move: function(){
-            this.x -= this.speed
+            this.x -= this.speed  //передвижение птицы
         },
         audio: loadAudio(['assets/audio/bird.mp3'],gameParams.volume.music),
         checkplane: function(){
+
             let polygonParachute = [{x:this.x+15,y:this.y+25},{x:this.x+60,y:this.y+25},{x:this.x+51,y:this.y+43},{x:this.x+13,y:this.y+40}]
             let polygonPlane = [{x:plane.x,y:plane.y},{x:plane.x+110,y:plane.y+13},{x:plane.x+91,y:plane.y+31},{x:plane.x+14,y:plane.y+35}]
             for (var i = 0; i < polygonParachute.length; i++) {
@@ -467,11 +468,11 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
 
     //функция запуска игры
     function startGame(){
-        gameParams.play = !gameParams.play;
-        gameParams.obstacle.stars.count = 0;
-        gameParams.time.ms = 0;
-        gameParams.time.minutes = 0;
-        plane.fuel = gameParams.plane.fuel
+        gameParams.play = !gameParams.play;   // обнуляем все 
+        gameParams.obstacle.stars.count = 0;  // игровые 
+        gameParams.time.ms = 0;               // парметры
+        gameParams.time.minutes = 0;         // перед стартом
+        plane.fuel = gameParams.plane.fuel   //  игры
         plane.x = 457;
         plane.y = 324;
         clouds = [];
@@ -488,14 +489,14 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     function gamePause(){
         gameParams.pause = !gameParams.pause
         if(!gameParams.pause){
-            theme.play()
+            theme.play()  
         }else{
             theme.pause()
         }
-        gameParams.time.timer();
-        gameLoop();
-        getClouds();
-        getRandomObstacle();
+        gameParams.time.timer();  //запускаем таймер
+        gameLoop();  //запускаем игровую петлю
+        getClouds(); //запускаем облака
+        getRandomObstacle(); // запускаем преграды
     }
 
 
@@ -503,11 +504,12 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
 
     //функция проигрыша 
     function gameOver(){
-        endOfFuel.play()
+        
         plane.state = true;
         gameParams.pause = !gameParams.pause
         gameParams.play = !gameParams.play;
-        theme.pause()  //останавливаем музыку
+        theme.pause()  //останавливаем основную музыку, если она включена
+        endOfFuel.play()  // и проигрываем проигрышную
         setTimeout(() => {
             modal.style.display = "flex"
             plane.state = false;
@@ -538,16 +540,16 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     //игровая петля для анимирования и отображения каких-либо изменений на экране
     function gameLoop(){
         if(!gameParams.pause){
-            planeCtx.clearRect(0,0,1024,768);
-            backgroundCtx.clearRect(0,0,1024,768);
-            obstacleCtx.clearRect(0,0,1024,768);
-            drawPlane()
-            drawClouds();
-            drawObstacle()
-            drawTime();
-            drawFuel();
-            drawStarsCount();
-            requestAnimationFrame(gameLoop);
+            planeCtx.clearRect(0,0,1024,768);    //чистим
+            backgroundCtx.clearRect(0,0,1024,768);  //канвас
+            obstacleCtx.clearRect(0,0,1024,768);    //для дальнейшей отрисковки
+            drawPlane()   //рисуем самолет
+            drawClouds(); // рисуем облака
+            drawObstacle() // рисуем преграды
+            drawTime(); // отображаем пройденное время
+            drawFuel(); // отображаем количество топлива у самолета
+            drawStarsCount();// отоборажаем количество собранных здвед
+            requestAnimationFrame(gameLoop);  //зацикливаем эту функцию с частотой 
         }
     }
 
@@ -566,10 +568,10 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         //движение вверх
         if(e.keyCode == 87 || e.keyCode == 38){  // W или cтрелочка вверх
            if(!plane.state){
-            plane.state = true
-            plane.actions = plane.up
+            plane.state = true    //меняес состояние самолета, чтобы нельзя было управлять во время перемещения вверх
+            plane.actions = plane.up    //выполняем функцию подьема самолета вверх
             setTimeout(() => {
-                plane.actions = plane.drop
+                plane.actions = plane.drop    //обратно возвращаем функцию свободного падения
                 plane.state = false
             }, 300);
            }
@@ -578,24 +580,24 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         //движение вниз
         if(e.keyCode == 83 || e.keyCode == 40){ // S или cтрелочка вниз
             if(!plane.state){
-                plane.state = true
-                plane.actions = plane.down
+                plane.state = true    //меняес состояние самолета, чтобы нельзя было управлять во время перемещения вниз
+                plane.actions = plane.down     //выполняем функцию подьема самолета вниз
                 setTimeout(() => {
-                    plane.actions = plane.drop
+                    plane.actions = plane.drop   //обратно возвращаем функцию свободного падения
                     plane.state = false
                 }, 300);
            }
         }
         //движение влево 
         if(e.keyCode == 65 || e.keyCode == 37) {  // А или cтрелочка влево
-            plane.x-=8;
+            plane.x-=8;   //перемещаем самолет влево
             }
         //движение вправо 
         if(e.keyCode == 68 || e.keyCode == 39){ // D или стрелочка вправо
-            plane.x+=8;
+            plane.x+=8;   //перемещаем самолет вправо
         }
         if(e.keyCode == 80){
-            theme.stop()
+            theme.stop()  //выключаем музыку
         }
     }
 
