@@ -17,6 +17,10 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     let backgroundCtx = backgroundCnv.getContext('2d');
     let btnStart = document.getElementById('btn-start');
     let modal = document.getElementById('modal');
+
+
+
+
     //*Создаем глобальный объект в котором храним основные параметры игры */
     //** loadImage - функция подгрузчик изображений */
     let gameParams = {
@@ -94,6 +98,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
 
 
 
+
     let canvas = document.querySelectorAll('.canvas')
     //* устанавливаем канвасу размеры и стили необходимые */
     for(let i = 0; i<canvas.length; i++){
@@ -102,6 +107,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     }
     backgroundCtx.font = "18px Filmotype Quiet";
     backgroundCtx.fillStyle = "red";
+
+
+
 
     //основной объект самолета 
     let plane = {
@@ -132,6 +140,8 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             }       
         }
     }
+
+
     // конструктор создания облаков
     let Cloud = function(img,w,h,x,y,speed){
         this.image = img;
@@ -147,7 +157,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         }
     }
 
-    let parachuteAudio = loadAudio(['assets/audio/parachute.mp3'],gameParams.volume.music)
+
+
+
 // конструктор создания парашютов
     let Parachute = function(x,y,w,h){
         this.x = x;
@@ -175,7 +187,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
                             p3 = polygonPlane[(j + 1) % polygonPlane.length];
 
                         if (segmentIntersect(p0, p1, p2, p3)) {
-                            parachuteAudio.play()
+                            this.audio.play()
                             plane.fuel = gameParams.plane.fuel
                             this.width = 0;
                             this.height = 0;
@@ -188,6 +200,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
                 return false;
         }
     }
+
+
+
     // конструктор создания здвезд
     let Star = function(x,y,w,h){
         this.x = x;
@@ -228,6 +243,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         }
     }
 
+
     
     // конструктор создания птиц
     let Bird = function(x,y,w,h,speed){
@@ -238,6 +254,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         this.num = 1;
         this.speed = speed;
     }
+
     Bird.prototype = {
         img : gameParams.obstacle.bird.img,
         move: function(){
@@ -269,6 +286,10 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
                 return false;
         }
     }
+
+
+
+
     //функция для сверки координат преграды и самолета
     function segmentIntersect(p0, p1, p2, p3) {
             var A1 = p1.y - p0.y,
@@ -301,6 +322,8 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
                 return null;
             }
         }
+
+
     //загружаем изображения облаков     
     function getCloudsImg(){
     let clouds = []
@@ -310,6 +333,8 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         }
         return clouds
     }
+
+
     let cloudsImg = getCloudsImg()
 
     let clouds = []
@@ -328,6 +353,7 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     } 
     
     
+
     let obstacle = []
     //получаем случайную преграду на пути
     function getRandomObstacle(){
@@ -352,6 +378,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             }, randomTime);
         }
     }
+
+
+
     //отрисовываем облака из массива
     function drawClouds(){
         for(let i = 0; i<clouds.length; i++){        
@@ -362,6 +391,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             }
         }
     }
+
+
+
     //отрисовываем преграды из массыва
     function drawObstacle(){
         for(let i = 0; i<obstacle.length; i++){
@@ -382,6 +414,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             }
         }
     }
+
+
+
     //отрисовываем игровое время
     function drawTime(){
         let time = gameParams.time.seconds
@@ -392,6 +427,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         backgroundCtx.drawImage(gameParams.time.logo.dom, 105, 5, gameParams.time.logo.width,gameParams.time.logo.height)
         backgroundCtx.fillText(time,140,23)
     }
+
+
+
     //отрисовываем топливо
     function drawFuel(){
         let fuelCurrentPercent = (plane.fuel/gameParams.plane.fuel)*100
@@ -402,11 +440,15 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             gameOver()   //если топливо кончилось игра окончена
         }
     }
+
+
+
     //отрисовываем количество собраных звезд
     function drawStarsCount(){
         backgroundCtx.drawImage(gameParams.obstacle.stars.img.dom,10,5,gameParams.obstacle.stars.img.width-3,gameParams.obstacle.stars.img.height-2);
         backgroundCtx.fillText(gameParams.obstacle.stars.count,45,23)
     }
+
 
     //отрисовываем самолет
     function drawPlane(){
@@ -420,6 +462,8 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         plane.actions(); //выполняем различные действия самолетом в зависимоти от манипуляции игроком
         planeCtx.drawImage(plane.img.dom,plane.x,plane.y,plane.img.width,plane.img.height);
     }
+
+
 
     //функция запуска игры
     function startGame(){
@@ -437,6 +481,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             plane.fuelConsumption();  //Включаем расход топлива через 5 секунд после старта
         }, 5000);
     }
+
+
+
     //функция приостановки игры
     function gamePause(){
         gameParams.pause = !gameParams.pause
@@ -449,8 +496,11 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         gameLoop();
         getClouds();
         getRandomObstacle();
-
     }
+
+
+
+
     //функция проигрыша 
     function gameOver(){
         endOfFuel.play()
@@ -463,6 +513,8 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             plane.state = false;
         }, 50);
     }
+
+
 
     //функция подгрузчик изображения для канваса
     function loadImage(path,width,height,count){
@@ -480,6 +532,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
         image.src = path;
         return result;
     }
+
+
+
     //игровая петля для анимирования и отображения каких-либо изменений на экране
     function gameLoop(){
         if(!gameParams.pause){
@@ -495,6 +550,10 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             requestAnimationFrame(gameLoop);
         }
     }
+
+
+
+
     //отслеживания команд от пользователя
     document.onkeydown = function(e){
         //Пауза
@@ -539,6 +598,9 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
             theme.stop()
         }
     }
+
+
+
     //функция подгрузчик аудио
     function loadAudio(arr, vol){
         var audio = document.createElement('audio');
@@ -573,8 +635,13 @@ var requestAnimationFrame =  window.requestAnimationFrame ||
     a.dom  = audio;
         return a;
     }
+
+    
     var theme = loadAudio(['assets/audio/theme.mp3'],gameParams.volume.music);
     var endOfFuel = loadAudio(['assets/audio/endOfFuel.mp3'],gameParams.volume.music);
+
+
+
     //клик по кнопке страрта игры
     btnStart.onclick = function(){
         modal.style.display = "none"
